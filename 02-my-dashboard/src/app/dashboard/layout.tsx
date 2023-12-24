@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { Sidebar } from "../components";
+import { Sidebar } from "@/components";
 
 export default function DashboardLayout({
   children,

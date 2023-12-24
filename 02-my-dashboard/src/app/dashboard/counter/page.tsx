@@ -1,5 +1,5 @@
 import React from "react";
-import { CarCounter } from "@/app/shopping-cart";
+import { CarCounter } from "@/shopping-cart";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
