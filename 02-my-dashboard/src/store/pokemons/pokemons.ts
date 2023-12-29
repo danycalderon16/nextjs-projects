@@ -3,32 +3,42 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { retry } from '@reduxjs/toolkit/query';
 
 interface PokemosState{
-  [key: string]: SinglePokemon,
+  favorites:{ [key: string]: SinglePokemon},
+}
+
+const getInitialState = ():PokemosState =>{
+  const favorites = JSON.parse(localStorage.getItem('favorites-pokemons') ?? '{}');
+  return favorites;
 }
 
 const initialState:PokemosState = {
-  '1': {id:'1', name:'bulbasor'},
-  '2': {id:'2', name:'Pickachu'}
+  // ...getInitialState()
+  favorites:{},
 }
 
 const pokemonsSlice = createSlice({
   name: 'pokemons',
   initialState,
   reducers: {
+    setFavorite(state, action:PayloadAction<{[key:string]:SinglePokemon}>){
+      state.favorites = action.payload;
+    },
     toggleFavorite(state, action:PayloadAction<SinglePokemon>){
       const pokemon = action.payload;
       const {id} = pokemon;
 
-      if(!!state[id]){                
-        delete state[id]
+      if(!!state.favorites[id]){                
+        delete state.favorites[id]
         return
+      }else{ 
+        state.favorites[id] = pokemon
       }
 
-      state[id] = pokemon
+      localStorage.setItem('favorites-pokemons',JSON.stringify(state.favorites))
     }
   }
 });
 
-export const {toggleFavorite} = pokemonsSlice.actions
+export const {toggleFavorite,setFavorite} = pokemonsSlice.actions
 
 export default pokemonsSlice.reducer
