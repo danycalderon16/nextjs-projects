@@ -1,8 +1,12 @@
+"use client";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { IoHeartOutline } from "react-icons/io5";
+import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { SinglePokemon } from "..";
+import { useAppSelector } from "@/store/store";
+import { useDispatch } from "react-redux";
+import { toggleFavorite } from "@/store/pokemons/pokemons";
 
 interface Props {
   pokemon: SinglePokemon;
@@ -10,6 +14,13 @@ interface Props {
 
 export const PokemonCard = ({ pokemon }: Props) => {
   const { id, name } = pokemon;
+  const isFavorite = useAppSelector((state) => !!state.pokemon[id]);
+  const dispatch = useDispatch()
+
+  const onToggle = ()  => {
+    dispatch(toggleFavorite(pokemon))
+  }
+
   return (
     <div className="mx-auto right-0 mt-2 w-60">
       <div className="flex flex-col bg-white rounded overflow-hidden shadow-lg">
@@ -22,30 +33,33 @@ export const PokemonCard = ({ pokemon }: Props) => {
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemon.id}.svg`}
             priority={false}
           />
-          <p className="pt-2 text-lg font-semibold text-gray-50 capitalize">{name}</p>
+          <p className="pt-2 text-lg font-semibold text-gray-50 capitalize">
+            {name}
+          </p>
           <p className="text-sm text-gray-100">John@Doe.com</p>
           <div className="mt-5">
-            <Link href={`./pokemon/${name}`} className="border rounded-full py-2 px-4 text-xs font-semibold text-gray-100">
+            <Link
+              href={`./pokemon/${name}`}
+              className="border rounded-full py-2 px-4 text-xs font-semibold text-gray-100"
+            >
               Más información
             </Link>
           </div>
         </div>
-        <div className="border-b">
-          <Link
-            href="/dashboard/main"
-            className="px-4 py-2 hover:bg-gray-100 flex items-center"
+        <div className="border-b" onClick={()=>onToggle()}>
+          <div
+            className="px-4 py-2 hover:bg-gray-100 flex items-center cursor-pointer"
           >
             <div className="text-red-600">
-            <IoHeartOutline />
+              {isFavorite ? <IoHeart /> : <IoHeartOutline />}
             </div>
             <div className="pl-3">
               <p className="text-sm font-medium text-gray-800 leading-none">
-                No es favorito
+                {isFavorite ? "Es favorito" : "No es favorito"}
               </p>
               <p className="text-xs text-gray-500">View your campaigns</p>
             </div>
-          </Link>
-       
+          </div>
         </div>
       </div>
     </div>
