@@ -20,4 +20,5 @@ export async function GET(request: Request, {params}:Segments) {
   }
 
   return NextResponse.json(todo);
+
 }

@@ -22,3 +22,18 @@ export async function GET(request: Request) {
 
   return NextResponse.json( todos );
 }
+
+export async function POST(request: Request) { 
+
+  try {
+    const { complete, description } = await postSchema.validate( await request.json() );
+
+    const todo = await prisma.todo.create({ data: { complete, description } })
+  
+    
+    return NextResponse.json(todo);
+    
+  } catch (error) {
+    return NextResponse.json( error, { status: 400 } );
+  }
+}
