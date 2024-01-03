@@ -1,6 +1,6 @@
 import React from "react";
 import prisma from "@/lib/prisma";
-import { NewTodo, TodosGrid } from "@/todos/components";
+import { NewTodo, TodosGrid } from "@/todos";
 
 export const metadata = {
   title: "Listado de Todos",

@@ -5,6 +5,7 @@ import { IoTrashOutline } from "react-icons/io5";
 import * as todosApi from '@/todos/helpers/todos';
 import { useRouter } from "next/navigation";
 import prisma from "@/lib/prisma";
+import { addTodo, deleteTodos } from "../actions/todo-actions";
 
 export const NewTodo = () => {
   const [description, setDescription] = useState("");
@@ -12,13 +13,14 @@ export const NewTodo = () => {
 
   const onSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await todosApi.createTodo(description);
-    router.refresh();
+    await addTodo(description);
+    setDescription('')
   };
 
-  const deleteCompleted = async(e: React.FormEvent<HTMLFormElement>) => {
+  const deleteCompleted = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    await todosApi.deleteTodo();
+    // await todosApi.deleteTodo();
+    await deleteTodos()
     router.refresh();
   };
 
