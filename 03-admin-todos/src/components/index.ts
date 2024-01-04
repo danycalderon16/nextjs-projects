@@ -1,3 +1,5 @@
+export { TabBar } from "./tab-bar";
+
 export { TopMenu } from "./top-menu";
 
 export { WidgetItem } from "./widget-item";
