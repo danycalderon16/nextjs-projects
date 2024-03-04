@@ -8,7 +8,7 @@ query GetUsers {
       lastname
       updatedAt
       name
-    }
+    } 
   }
 }
 
@@ -29,7 +29,7 @@ export const GET_USUARIO_QUERY = `
 
 export const CREATE_USUARIO_MUTATION = `
   mutation CreateUsuario($email: String!, $name: String!, $lastname: String!) {
-    createUsuario(input: { email: $email, name: $name, lastname: $lastname }) {
+    createUsuario(input: { email: $email, name: $name, lastname: $lastname}) {
       createdAt
       email
       id
