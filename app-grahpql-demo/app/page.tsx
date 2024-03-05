@@ -13,14 +13,14 @@ export default function Home() {
 
   const handleOneUser = async (id:string) => {
 
-    const result = await client.graphql({
+    const result:any = await client.graphql({
       query: GET_USUARIO_QUERY,
       variables: {
         id
       }
     });
     
-    const keys = Object.entries(result.data.getUsuario);
+    const keys = Object.entries(result.data.listActividades);
     
     alert(keys)
   }
@@ -39,7 +39,7 @@ export default function Home() {
           className="border border-gray-800 p-2 rounded-md cursor-pointer hover:shadow-md hover:scale-105"          
           key={user.id}>
           
-          <p>{user.name}</p>
+          <p>{user.url_video}</p>
           </div>
         ))
       }

@@ -12,11 +12,14 @@ export const useItems = () => {
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true)
-      const results = await client.graphql({
+      const results:any = await client.graphql({
         query: GET_USERS,
       });
 
-      setItems([...results.data.listUsuarios.items]);
+      console.log({results});
+      
+
+      setItems([...results.data.listActividades.items]);
       setLoading(false)
     };
     fetchItems();
