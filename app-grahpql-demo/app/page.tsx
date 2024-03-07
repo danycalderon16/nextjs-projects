@@ -1,14 +1,17 @@
 "use client";
 import CreateItem from "@/components/create-item";
-import { GET_USERS, GET_USUARIO_QUERY } from "@/graphql/queries";
+import { GET_USUARIO_QUERY } from "@/graphql/queries";
 import { useItems } from "@/hooks/useItems";
 import { generateClient } from "aws-amplify/api";
-import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 const client = generateClient();
 
 export default function Home() {
  
   const { items, loading } = useItems();
+  const params = useSearchParams()
+  
+  console.log(params.get("token"));
   
 
   const handleOneUser = async (id:string) => {
@@ -30,6 +33,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen items-center justify-evenly gap-2 p-24">
       <div className="grid grid-cols-3 gap-2">
+        <p>{params.get("token")}</p>
       {
         loading ?
         <p>Loading...</p>:
