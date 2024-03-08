@@ -1,20 +1,30 @@
-export const GET_USERS = `
-query GetUsers {
-  listUsuarios {
-    items {
-      createdAt
-      email
-      id
-      lastname
-      updatedAt
-      name
-    } 
+export const GET_ITEMS = /* GraphQL */ `
+  query MyQuery {
+    llistVideosInteractivos {
+      items {
+        createdAt
+        id_actividad
+        id_creador
+        id_proyecto
+        url_video
+        timestamps {
+          time
+          tipo
+          act {
+            correctAnswer
+            incorrectAnswer1
+            incorrectAnswer3
+            question
+            incorrectAnswer2
+          }
+        }
+        updatedAt
+      }
+    }
   }
-}
+`;
 
-`
-
-export const GET_USUARIO_QUERY = `
+export const GET_USUARIO_QUERY = /* GraphQL */ `
   query GetUsuario($id: ID!) {
     getUsuario(id: $id) {
       email
@@ -27,9 +37,9 @@ export const GET_USUARIO_QUERY = `
   }
 `;
 
-export const CREATE_USUARIO_MUTATION = `
+export const CREATE_USUARIO_MUTATION = /* GraphQL */ `
   mutation CreateUsuario($email: String!, $name: String!, $lastname: String!) {
-    createUsuario(input: { email: $email, name: $name, lastname: $lastname}) {
+    createUsuario(input: { email: $email, name: $name, lastname: $lastname }) {
       createdAt
       email
       id

@@ -1,6 +1,6 @@
 {
   "api": {
-    "pruebagraph": {
+    "graphqlv3": {
       "dependsOn": [],
       "output": {
         "authConfig": {
