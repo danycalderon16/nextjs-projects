@@ -1,5 +1,0 @@
-{
-  "AppSyncApiName": "graphqlv3",
-  "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
-}

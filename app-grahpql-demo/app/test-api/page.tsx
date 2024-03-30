@@ -45,7 +45,7 @@ export default function Page() {
             <div className="grid grid-cols-4 gap-3">
 {
             videos.map((video:any, index:number) => (
-            <div className="flex flex-col">
+            <div className="flex flex-col" key={video.snippet.thumbnails.high.url}>
               <Image src={video.snippet.thumbnails.high.url} alt="thumbnail" width={220} height={80}/>
               <p className="text-base">{video.snippet.title}</p>
               <p className="text-sm">{video.snippet.channelTitle}</p>
