@@ -14,7 +14,7 @@ const DocumentsPage = () => {
 
   const onCreate = () => {
     const promise = create({
-      title:"Untitle"
+      title:"Untitled"
     });
 
     toast.promise(promise,{
