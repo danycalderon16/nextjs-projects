@@ -32,6 +32,8 @@ export const DocumentList = ({ parentDocumentId, level = 0, data }: Props) => {
     router.push(`/documents/${documentId}`);
   };
 
+  console.log(level);
+  
   if (documents === undefined) {
     return (
       <>
@@ -49,15 +51,15 @@ export const DocumentList = ({ parentDocumentId, level = 0, data }: Props) => {
     <>
       <p
         style={{
-          paddingLeft: level ? `${level * 12 + 25}px` : "12px",
+          paddingLeft: level ? `${(level * 12 )+ 25}px` : undefined,
         }}
-        className={cn("hidden text-sm font-medium text-muted-foreground",
+        className={cn("hidden text-sm font-medium text-muted-foreground bg-red-400",
                 isExpanded && "last:block",
                 level === 0 && "hidden"
         )}
-      >No pages inside</p>
+      >No pages insidsddse</p>
       {documents.map((docuement)=>(
-        <div key={docuement._id}>
+        <div key={docuement._id} className="transition-all">
           <Item 
             id={docuement._id}
             onClick={()=>onRedirect(docuement._id)}

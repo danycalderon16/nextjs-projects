@@ -47,7 +47,9 @@ export const Item = ({
     onExpand?.();
   }
 
-  const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const onArchive = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     event.stopPropagation();
     if(!id) return;
     const promise = archive({id})
@@ -72,9 +74,6 @@ export const Item = ({
       }
       // router.push(`/documents/${documentId}`)
     })
-    .catch((err) => {
-      console.log(err);
-    });
 
     toast.promise(promise, {
       loading: "Creating a new note...",
@@ -169,7 +168,7 @@ Item.Skeleton = function ItemSkeleton({level}:{level?:number}) {
     <div style={{
       paddingLeft:level ? `${level * 12 + 25}px` : "12px"
     }}
-    className="flex gap-x-2 py-[30px]">
+    className="flex gap-x-2 py-[3px]">
       <Skeleton className="h-4 w-4"/>
       <Skeleton className="h-4 w-[30%]"/>
     </div>
