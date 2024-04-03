@@ -1,9 +1,13 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronRight, LucideIcon } from "lucide-react";
+import { useMutation } from "convex/react";
+import { ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface Props {
   id?: Id<"documents">;
@@ -30,6 +34,38 @@ export const Item = ({
   onExpand,
   documentIcon,
 }: Props) => {
+
+  const create = useMutation(api.docuements.create);
+  const router = useRouter();
+
+  const handleExpand = (event:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+    onExpand?.();
+  }
+
+  const onCreate = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    if(!id) return;
+    const promise = create({title:"Untitled", parentDocument: id})
+    .then((documentId) => {
+      if(documentId){
+        onExpand?.();
+      }
+      // router.push(`/documents/${documentId}`)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+    toast.promise(promise, {
+      loading: "Creating a new note...",
+      success: "New note created!",
+      error: "Error creating a new note",
+    })
+  }
+
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
   return (
@@ -52,7 +88,7 @@ export const Item = ({
         <div
           role="button"
           className="h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600 mr-1"
-          onClick={() => {}}
+          onClick={handleExpand}
         >
           <ChevronIcon />
         </div>
@@ -69,6 +105,16 @@ export const Item = ({
         font-mono text-[10px] font-medium text-muted-foreground opacity-100`}>
           <span className="text-sx">Ctrl </span>K
         </kbd>
+      )}
+      {!!id && (
+        <div className="ml-auto flex items-center gap-x-2">
+          <div 
+          role="button"
+          onClick={onCreate}
+          className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:bg-neutral-600">
+            <Plus className="h-4 w-4 text-muted-foreground" />
+          </div>
+        </div>
       )}
     </div>
   );
