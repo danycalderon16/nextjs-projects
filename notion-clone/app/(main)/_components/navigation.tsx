@@ -1,20 +1,20 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings } from "lucide-react";
+import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { UserItem } from "./user-item";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation  } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Item } from "./item";
 import { toast } from "sonner";
+import { DocumentList } from "./document-list";
 
 export const Navigation = () => {
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const documents = useQuery(api.docuements.get);
   const create = useMutation(api.docuements.create);
 
   const isResizingRef = useRef(false);
@@ -112,7 +112,7 @@ export const Navigation = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[00000]",
+          "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "w-0"
         )}
@@ -122,7 +122,7 @@ export const Navigation = () => {
           className={cn(
             `h-6 w-6 text-muted-foreground rounded-sm
           hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute
-          top-3 right-2 opacity-0 group-hover/sidebar:opacity-100`,
+          top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition`,
             isMobile && "opacity-100"
           )}
           role="button"
@@ -137,9 +137,12 @@ export const Navigation = () => {
           <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
-          {documents?.map((doc: any) => (
-            <div key={doc._id}>{doc.title}</div>
-          ))}
+          <DocumentList />
+          <Item 
+            onClick={handleCreate}
+            icon={Plus}
+            label="Add page"
+          />
         </div>
         <div
           onMouseDown={handleMouseDown}
@@ -159,7 +162,7 @@ export const Navigation = () => {
       <div
         ref={navbarRef}
         className={cn(
-          "absolute top-0 z-[99999] left-60",
+          "absolute top-0 z-[99999] left-60 w-[calc(100%-240px)]",
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "left-0 w-full"
         )}
