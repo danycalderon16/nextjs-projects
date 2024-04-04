@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings } from "lucide-react";
+import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Trash } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
@@ -10,7 +10,7 @@ import { api } from "@/convex/_generated/api";
 import { Item } from "./item";
 import { toast } from "sonner";
 import { DocumentList } from "./document-list";
-import { Popover, PopoverContent } from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export const Navigation = () => {
   const pathname = usePathname();
@@ -137,8 +137,13 @@ export const Navigation = () => {
 
           <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
           <Popover>
-            <PopoverContent className="w-full mt-4">
-              
+            <PopoverTrigger className="w-full mt-4">
+              <Item label="Trash" icon={Trash}/>
+            </PopoverTrigger>
+            <PopoverContent 
+            className="p-0 w-72"
+            side={isMobile ? "bottom":"right"}>
+              <p>Trash box</p>
             </PopoverContent>
           </Popover>
         </div>
