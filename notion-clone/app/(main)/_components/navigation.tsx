@@ -10,6 +10,7 @@ import { api } from "@/convex/_generated/api";
 import { Item } from "./item";
 import { toast } from "sonner";
 import { DocumentList } from "./document-list";
+import { Popover, PopoverContent } from "@/components/ui/popover";
 
 export const Navigation = () => {
   const pathname = usePathname();
@@ -135,6 +136,11 @@ export const Navigation = () => {
           <Item onClick={()=>{}} label="Settings" icon={Settings}/>
 
           <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
+          <Popover>
+            <PopoverContent className="w-full mt-4">
+              
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="mt-4">
           <DocumentList />
