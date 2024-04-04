@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
+import { Doc, Id } from "./_generated/dataModel";
 
 export const archive = mutation({
   args: {
@@ -21,19 +21,19 @@ export const archive = mutation({
     const recursiveArchive = async (documentId: Id<"documents">) => {
       const children = await ctx.db
         .query("documents")
-        .withIndex("by_user_parent", (q)=> (
+        .withIndex("by_user_parent", (q) =>
           q.eq("userId", userId).eq("parentDocument", documentId)
-        ))
+        )
         .collect();
       for (const child of children) {
-        await ctx.db.patch(child._id, {isArchived: true});
+        await ctx.db.patch(child._id, { isArchived: true });
 
         await recursiveArchive(child._id);
       }
-    }
+    };
 
-    const document = await ctx.db.patch(args.id, {isArchived: true});
-    
+    const document = await ctx.db.patch(args.id, { isArchived: true });
+
     return document;
   },
 });
@@ -82,7 +82,6 @@ export const create = mutation({
   },
 });
 
-
 export const getTrash = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -92,11 +91,84 @@ export const getTrash = query({
 
     const documents = await ctx.db
       .query("documents")
-      .withIndex("by_user", (q) =>
-        q.eq("userId", userId)
-      )
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .filter((q) => q.eq(q.field("isArchived"), true))
+      .order("desc")
       .collect();
     return documents;
+  },
+});
+
+export const restore = mutation({
+  args: {
+    id: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const userId = identity.subject;
+
+    const existingDocuemnt = await ctx.db.get(args.id);
+
+    if (!existingDocuemnt) throw new Error("Document not found");
+
+    if (existingDocuemnt.userId !== userId) throw new Error("Unauthorized");
+
+    const recursiveStore = async (documentId:Id<"documents">) => {
+      const children = await ctx.db
+        .query("documents")
+        .withIndex("by_user_parent", (q) => (
+          q
+            .eq("userId", userId)
+            .eq("parentDocument", documentId)
+        ))
+        .collect();
+
+        for (const child of children){
+          await ctx.db.patch(child._id, { isArchived: false });
+          await recursiveStore(child._id);
+        }
+    }
+
+    const options: Partial<Doc<"documents">> = {
+      isArchived: false,
+    };
+
+    if (existingDocuemnt.parentDocument) {
+      const parent = await ctx.db.get(existingDocuemnt.parentDocument);
+      if (parent?.isArchived) {
+        options.parentDocument = undefined;
+      }
+    }
+
+    const document =  await ctx.db.patch(args.id, options);
+
+    recursiveStore(args.id);
+
+    return document;
+  },
+});
+
+
+export const remove = mutation({
+  args: {
+    id: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const userId = identity.subject;
+
+    const existingDocuemnt = await ctx.db.get(args.id);
+
+    if (!existingDocuemnt) throw new Error("Document not found");
+
+    if (existingDocuemnt.userId !== userId) throw new Error("Unauthorized");
+
+    const document =  await ctx.db.delete(args.id);
+
+    return document;
   },
 });
