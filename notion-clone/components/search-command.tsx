@@ -4,7 +4,7 @@ import { useQuery } from 'convex/react'
 import { File } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { CommandDialog } from '@/components/ui/command'
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { api } from '@/convex/_generated/api'
 import { useSearch } from '@/hooks/use-search'
 
@@ -12,7 +12,7 @@ export const SearchCommand = () => {
 
   const {user } = useUser();
   const router = useRouter(); 
-  const docuemnts = useQuery(api.docuements.getSearch)
+  const documents = useQuery(api.docuements.getSearch)
   const [isMounted, setIsMounted] = useState(false)
 
   const toggle = useSearch((store)=> store.toggle)
@@ -28,7 +28,44 @@ export const SearchCommand = () => {
     return null;
   }
 
+  useEffect(()=>{
+    const down = (e:KeyboardEvent) =>  {
+      if(e.key === "k" && (e.metaKey || e.ctrlKey)){
+        e.preventDefault();
+        toggle();
+      }
+    }
+    document.addEventListener("keydown", down);
+    return ()=> document.removeEventListener("keydown", down);
+  },[toggle])
+
+  const onSelect = (id: string) =>{
+    router.push(`/documents/${id}`)
+    onClose();
+  }
+
   return (
-    <CommandDialog open={isOpen} onOpenChange={onClose}>search-command</CommandDialog>
+    <CommandDialog open={isOpen} onOpenChange={onClose}>
+      <CommandInput 
+      placeholder={`Search ${user?.fullName}'Dotion..`}/>
+      <CommandList>
+        <CommandEmpty>Not results found.</CommandEmpty>
+        <CommandGroup heading="Documents">
+          {documents?.map((document)=>(
+            <CommandItem
+            key={document._id}
+            value={`${document._id}-${document.title}`}
+            title={document.title}
+            onSelect={onSelect}>
+              {document.icon ?(
+                <p className='mr-2 text-[18px]'>{document.icon}</p>
+              ):(
+                <File className='mr-2 h-4 w-4'/>
+              )}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      </CommandList>
+    </CommandDialog>
   )
 }
