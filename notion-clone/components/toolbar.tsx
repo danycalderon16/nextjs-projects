@@ -8,6 +8,7 @@ import { IconPicker } from "./icon-picker";
 import { Button } from "./ui/button";
 import { Doc } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
+import { useCoverImage } from "@/hooks/use-cover-image";
 
 interface Props {
   initialData: Doc<"documents">;
@@ -22,6 +23,8 @@ export const Toolbar = ({ initialData, preview }: Props) => {
 
   const update = useMutation(api.docuements.update);
   const removeIcon = useMutation(api.docuements.removeIcon);
+
+  const coverImage = useCoverImage();
 
   const enableInput = () => {
     if(preview) return;
@@ -102,6 +105,7 @@ export const Toolbar = ({ initialData, preview }: Props) => {
         )}
         {!initialData.coverImage && !preview && (
           <Button
+            onClick={coverImage.onOpen}
             className="text-muted-foreground text-xs"
             variant="outline"
             size="sm"

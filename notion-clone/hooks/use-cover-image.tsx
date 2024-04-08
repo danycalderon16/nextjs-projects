@@ -6,7 +6,7 @@ type CoverImageStore = {
   onClose: () => void;
 }
 
-export const CoverImageStore = create<CoverImageStore>((set) => ({
+export const useCoverImage = create<CoverImageStore>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
