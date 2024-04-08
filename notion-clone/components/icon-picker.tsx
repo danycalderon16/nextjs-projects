@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useTheme } from 'next-themes';
 
 interface Props {
-  onChange: (icon:String) => void;
+  onChange: (icon:string) => void;
   children: React.ReactNode;
   asChild?: boolean
 }
@@ -23,7 +23,7 @@ export const IconPicker = ({
     dark: Theme.DARK,
   }
   
-  const theme = themeMap[currentTheme];
+  const theme = themeMap[currentTheme];  
 
   return (
     <Popover>
