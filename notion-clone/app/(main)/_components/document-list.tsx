@@ -57,7 +57,7 @@ export const DocumentList = ({ parentDocumentId, level = 0, data }: Props) => {
                 isExpanded && "last:block",
                 level === 0 && "hidden"
         )}
-      >No pages insidsddse</p>
+      >No pages inside</p>
       {documents.map((docuement)=>(
         <div key={docuement._id} className="transition-all">
           <Item 
