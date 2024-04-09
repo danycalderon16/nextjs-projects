@@ -9,6 +9,7 @@ import { useCoverImage } from "@/hooks/use-cover-image";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { useEdgeStore } from "@/lib/edgestore";
 
 interface Props {
   url?: string;
@@ -17,11 +18,17 @@ interface Props {
 
 export const Cover = ({ url, preview }: Props) => {
   const cover = useCoverImage();
+  const { edgestore } = useEdgeStore();
   const removeCoverImage = useMutation(api.docuements.removeCoverImage)
 
   const params = useParams();
 
-  const onRemove = () => {
+  const onRemove = async () => {
+    if(url){
+    await edgestore.publicFiles.delete({
+      url: url
+    })
+    }
     removeCoverImage({
       id: params.documentId as Id<"documents">
     })
@@ -38,7 +45,7 @@ export const Cover = ({ url, preview }: Props) => {
       {url && !preview && (
         <div className="opacity-0 group-hover:opacity-100 absolute bottom-5 right-5 flex items-center gap-x-2">
           <Button
-            onClick={cover.onOpen}
+            onClick={()=> cover.onReplace(url)}
             className="text-muted-foreground text-xs"
             variant="outline"
             size="sm"
