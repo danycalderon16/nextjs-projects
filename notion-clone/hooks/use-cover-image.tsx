@@ -4,6 +4,7 @@ type CoverImageStore = {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+
 }
 
 export const useCoverImage = create<CoverImageStore>((set) => ({

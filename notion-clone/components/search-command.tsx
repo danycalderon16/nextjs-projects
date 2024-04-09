@@ -43,8 +43,6 @@ export const SearchCommand = () => {
   if(!isMounted){
     return null;
   }
-  console.log(documents);
-  
 
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
