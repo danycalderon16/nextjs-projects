@@ -43,7 +43,7 @@ const DocuemntIdPage = ({ params }: Props) => {
         <Toolbar initialData={document} />
         <Editor 
           onChange={()=>{}}
-          initialData={document.content}
+          initialConten={document.content}
         />
       </div>
     </div>
