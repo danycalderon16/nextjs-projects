@@ -5,7 +5,7 @@ import { Toolbar } from "@/components/toolbar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import React from "react";
 
 interface Props {
@@ -18,6 +18,12 @@ const DocuemntIdPage = ({ params }: Props) => {
   const document = useQuery(api.docuements.getById, {
     documentId: params.documentId,
   });
+
+  const update = useMutation(api.docuements.update);
+
+  const onChange = (content: string) => {
+    update({ id: params.documentId, content });
+  };
 
   if (document === undefined)
     return (
@@ -42,8 +48,8 @@ const DocuemntIdPage = ({ params }: Props) => {
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
         <Toolbar initialData={document} />
         <Editor 
-          onChange={()=>{}}
-          initialConten={document.content}
+          onChange={onChange}
+          initialContent={document.content}
         />
       </div>
     </div>
