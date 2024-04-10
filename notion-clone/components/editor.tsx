@@ -12,7 +12,7 @@ interface Props {
   editable?: boolean;
 }
 
-export const Editor = ({ onChange, initialContent, editable }: Props) => {
+const Editor = ({ onChange, initialContent, editable }: Props) => {
   const { theme } = useTheme();
   const { edgestore } = useEdgeStore();
 
@@ -41,3 +41,5 @@ export const Editor = ({ onChange, initialContent, editable }: Props) => {
     </div>
   );
 };
+
+export default Editor;

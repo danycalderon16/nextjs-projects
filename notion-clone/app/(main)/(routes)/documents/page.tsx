@@ -5,17 +5,19 @@ import { useUser } from '@clerk/clerk-react'
 import { useMutation } from 'convex/react'
 import { PlusCircle } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { toast } from 'sonner'
 
 const DocumentsPage = () => {
   const {user} = useUser();
+  const router = useRouter();
   const create = useMutation(api.docuements.create);
 
   const onCreate = () => {
     const promise = create({
       title:"Untitled"
-    });
+    }).then((docuemntId) => router.push(`/documents/${docuemntId}`));
 
     toast.promise(promise,{
       loading:"Creating...",
