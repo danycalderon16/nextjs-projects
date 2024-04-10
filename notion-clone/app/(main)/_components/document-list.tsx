@@ -32,8 +32,6 @@ export const DocumentList = ({ parentDocumentId, level = 0, data }: Props) => {
     router.push(`/documents/${documentId}`);
   };
 
-  console.log(level);
-  
   if (documents === undefined) {
     return (
       <>

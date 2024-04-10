@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 
 export const archive = mutation({
   args: {
@@ -220,8 +220,11 @@ export const update = mutation({
     isPublished: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
+    console.log({args});
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
+
+    
 
     const userId = identity.subject;
 
@@ -256,6 +259,28 @@ export const removeIcon = mutation({
     if (existingDocuemnt.userId !== userId) throw new Error("Unauthorized");
 
     const document = await ctx.db.patch(args.id, { icon: undefined });
+
+    return document;
+  }
+})
+
+export const removeCoverImage = mutation({
+  args: {
+    id: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const userId = identity.subject;
+
+    const existingDocuemnt = await ctx.db.get(args.id);
+
+    if (!existingDocuemnt) throw new Error("Document not found");
+
+    if (existingDocuemnt.userId !== userId) throw new Error("Unauthorized");
+
+    const document = await ctx.db.patch(args.id, { coverImage: undefined });
 
     return document;
   }
