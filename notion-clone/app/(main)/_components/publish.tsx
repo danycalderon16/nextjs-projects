@@ -10,7 +10,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Globe } from "lucide-react";
+import { Check, Copy, Globe } from "lucide-react";
 
 interface Props {
   initialData: Doc<"documents">;
@@ -72,8 +72,32 @@ export const Publish = ({ initialData }: Props) => {
       </PopoverTrigger>
       <PopoverContent className="w-72" align="end" alignOffset={8} forceMount>
         {initialData.isPublished ? (
-         <div>
-          Published
+         <div className="space-y-4">
+          <div className="flex items-center gap-x-2">
+            <Globe className="text-sky-500 animate-pulse h-4 w-4"/>
+            <p className="text-xs font-medium text-sky-500">This note is live on web</p>
+          </div>
+          <div className="flex items-center">
+            <input className="flex-1 px-2 text-xs border rounded-l-md h-8 bg-muted truncate" 
+            value={url}
+            disabled/>
+            <Button
+              onClick={onCopy}
+              disabled={copied}
+              className="h-8 rounded-l-none"
+            >
+              {copied ? (
+                <Check className="w-4 h-4"/>
+              ):(
+                <Copy className="h-4 w-4"/>
+              )}
+            </Button>
+          </div>
+          <Button size="sm"
+            className="w-full text-xs"
+            disabled={isSubmitting}
+            onClick={onUnublish}
+          >Unpublish</Button>
          </div>
         ) : (
           <div className="flex flex-col items-center justify-center"
