@@ -27,8 +27,8 @@ export default function Login() {
       signIn('credentials', {
         redirect: false,
         email,
-        // accessToken: data.AccessToken,
-        // idToken: data.IdToken,
+        accessToken: data.AccessToken,
+        idToken: data.IdToken,
         password
       });
     } else {

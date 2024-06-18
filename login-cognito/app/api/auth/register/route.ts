@@ -1,10 +1,10 @@
 // app/api/auth/register/route.ts
 
-import { NextRequest, NextResponse } from 'next/server';
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { NextRequest, NextResponse } from "next/server";
+import { CognitoIdentityServiceProvider } from "aws-sdk";
 
 const cognito = new CognitoIdentityServiceProvider({
-  region: "us-east-1"
+  region: "us-east-1",
 });
 
 export async function POST(req: NextRequest) {
@@ -17,12 +17,16 @@ export async function POST(req: NextRequest) {
       Password: password,
       UserAttributes: [
         {
-          Name: 'email',
+          Name: "email",
           Value: email,
         },
-         {
-          Name: 'name',
+        {
+          Name: "name",
           Value: name,
+        },
+        {
+          Name: "custom:role",
+          Value: "custom:client",
         },
       ],
     };
