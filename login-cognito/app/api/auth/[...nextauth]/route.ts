@@ -19,7 +19,6 @@ const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        console.log(credentials);
         
         const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/login`, {
           method: 'POST',
@@ -45,14 +44,12 @@ const authOptions: NextAuthOptions = {
         token.accessToken = user.accessToken;
         token.idToken = user.idToken;
       }
-      console.log(token);
       
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
       session.idToken = token.idToken;
-      console.log({session, token});
       
       return session;
     },
